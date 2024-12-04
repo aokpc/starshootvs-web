@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Star shoot</title>
+</head>
+
+<body>
+    <style>
+        body {
+            margin: 0px;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffda60;
+        }
+
+        .run,
+        .input {
+            margin: 0px;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffda60;
+            font-size: 30px;
+            width: 100%;
+            border-color: #fff;
+        }
+
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0px;
+            background-color: #29B6F6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            font-size: 30px;
+            width: 33%;
+            text-align: center;
+            text-align-last: center;
+            height: 100px;
+            font-weight: 1000;
+        }
+
+        option {
+            overflow-wrap: break-word;
+        }
+
+        h1 {
+            margin: 0px;
+        }
+
+        p#ver {
+            text-align: right;
+        }
+    </style>
+    <div style="width:99.5%;height:100vh;" id="base">
+        <h1 style="text-align: center;"><img style="width: 500px;" src="https://flowgdd.com/star/img/shiny_logo.gif" alt="">
+        </h1>
+        <h1 style="text-align: center;font-size: 30px;">
+            キャラを選択
+        </h1>
+        <div id="select">
+        </div>
+        <h1 style="text-align: center;font-size: 30px;">
+            スキルを選択
+        </h1>
+        <div id="skill-select">
+            <select id="skill-select0">
+            </select>
+            <select id="skill-select1">
+            </select>
+            <select id="skill-select2">
+            </select>
+        </div>
+        <div id="run"></div>
+        <div id="preview"></div>
+        <p id="ver"></p>
+    </div>
+    <script src="./pixi.js"></script>
+    <script>
+        window.kakin = 1
+        window.dev = true
+    </script>
+    <script src="./game.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Star shoot</title>
+</head>
+
+<body>
+    <style>
+        body {
+            margin: 0px;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffda60;
+        }
+
+        .run,
+        .input {
+            margin: 0px;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffda60;
+            font-size: 30px;
+            width: 100%;
+            border-color: #fff;
+        }
+
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0px;
+            background-color: #29B6F6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            font-size: 30px;
+            width: 33%;
+            text-align: center;
+            text-align-last: center;
+            height: 100px;
+            font-weight: 1000;
+        }
+
+        option {
+            overflow-wrap: break-word;
+        }
+
+        h1 {
+            margin: 0px;
+        }
+        p#ver{
+            text-align: right;
+        }
+    </style>
+    <div id="dev">
+        <button type="button" class="run" onclick="tsc()">コードを更新</button>
+    </div>
+    <script src="./pixi.js"></script>
+    <script>
+        window.kakin = 1
+        function tsc() {
+            fetch("/tsc").then(()=>{checkVer()})
+        }
+    </script>
+</body>
+
+</html>

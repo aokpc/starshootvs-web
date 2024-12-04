@@ -1,0 +1,1 @@
+export * as PIXI from "npm:pixi.js"

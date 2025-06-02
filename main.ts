@@ -1,5 +1,3 @@
-import { bundle } from "https://deno.land/x/emit/mod.ts";
-
 type ModeSocket = {
   socket: WebSocket
   g_mode: number
@@ -11,15 +9,19 @@ type GameSocket = {
 }
 
 let ver = Date.now()
-const PATH = "/Users/211601aok/Desktop/vsc/st/";
+const PATH = "./";
 const WS_pair: Record<string, GameSocket> = {};
-
-export async function handler(request: Request) {
+const onlines: Record<string, number> = {};
+export async function handler(request: Request, conn: Deno.ServeHandlerInfo<Deno.NetAddr>) {
   const url = new URL(request.url);
 
   switch (url.pathname.split("/")[1]) {
     case "":
       return new Response(await Deno.readTextFile(PATH + "res/index.html"), {
+        headers: { "content-type": "text/html" },
+      });
+    case "mobile":
+      return new Response(await Deno.readTextFile(PATH + "res/mobile.html"), {
         headers: { "content-type": "text/html" },
       });
     case "premium":
@@ -65,6 +67,14 @@ export async function handler(request: Request) {
       return new Response(JSON.stringify(a), {
         headers: { "content-type": "application/json" },
       });
+    case "online":
+      onlines[conn.remoteAddr.hostname] = Date.now()
+      for (const k in onlines) {
+        if (onlines[k] < Date.now() - 1000 * 60 * 1.5) {
+          delete onlines[k]
+        }
+      }
+      return new Response((Object.keys(onlines).length + ""));
     default:
       break;
   }
@@ -92,6 +102,9 @@ export async function handler(request: Request) {
       case "css":
         mimeType = "text/css";
         break;
+      case "m4a":
+        mimeType = "audio/mpeg";
+        break;
       default:
         break;
     }
@@ -112,9 +125,10 @@ function ws(request: Request, url: URL) {
   if (!upgradeHeader || upgradeHeader !== "websocket") {
     return (new Response("Expected Upgrade: websocket", { status: 426 }));
   }
-  console.log("WS [open] :", url.search.substring(1))
   const { socket, response } = Deno.upgradeWebSocket(request);
   const key = url.search.substring(1);
+  console.log("WS [open] :", key)
+
   const msocket: ModeSocket = { socket, g_mode: 0 }
 
   msocket.socket.onmessage = (event) => {
@@ -130,7 +144,7 @@ function ws(request: Request, url: URL) {
     }
   };
   socket.onclose = () => {
-    console.log("WS [close]:", url.search.substring(1))
+    console.log("WS [close]:", key)
     delete WS_pair[key];
   };
 
@@ -138,12 +152,11 @@ function ws(request: Request, url: URL) {
     msocket.g_mode = 1;
     WS_pair[key][1] = msocket;
     socket.onopen = () => {
-      console.log("WS [start]:", url.search.substring(1))
-      const box = Math.floor(Math.random() * 5).toString();
+      const box = Math.floor(Math.random() * 5);
+      console.log("WS [start]:", key, box)
       WS_pair[key].status = "start";
-      const on = Date.now()
-      WS_pair[key][0]?.socket.send(JSON.stringify({ on, start: { side: 0, box } }));
-      socket.send(JSON.stringify({ on, start: { side: 1, box } }));
+      WS_pair[key][0]?.socket.send(JSON.stringify({ side: 0, box }));
+      socket.send(JSON.stringify({ side: 1, box }));
     };
   } else {
     const g: GameSocket = { status: "open" }
@@ -158,14 +171,9 @@ function ws(request: Request, url: URL) {
 }
 
 async function tsc() {
-  ver = Date.now()
-  await Deno.writeTextFile(PATH + "/js/pixi.ts", "export var PIXI = PIXI")
-  const { code } = await bundle(PATH + "/js/game.ts");
-  await Deno.writeTextFile(PATH + "res/game.js", (code).replaceAll(/export.*/g, "").replaceAll("  ", ""));
-  await Deno.writeTextFile(PATH + "/js/pixi.ts", 'export * as PIXI from "npm:pixi.js"')
   return new Response()
 }
 
 await tsc()
 
-Deno.serve({ port: 4301, hostname: "0.0.0.0" }, handler);
+Deno.serve(handler);

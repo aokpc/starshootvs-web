@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カスタム星人</title>
+</head>
+
+<body>
+    <style>
+        input[type="checkbox"] {
+            width: 28px;
+            height: 28px;
+            margin: 1px;
+            color: #000;
+        }
+
+        input[type="checkbox"]:checked {
+            accent-color: #ffc400;
+        }
+
+        .big {
+            font-size: 25px;
+        }
+
+        .text {
+            width: 100%;
+            height: 20px;
+            font-size: 10px;
+            border: 1px solid #000;
+        }
+    </style>
+    <div class="main">
+    </div>
+    <div>
+        <label><input type="checkbox" id="mode"><span class="big">VALUE</span></label>
+        <label><input type="checkbox" id="pd"><span class="big">MODE</span></label>
+    </div>
+    <textarea id="set" class="text"></textarea>
+    <button onclick="set()">SET</button>
+    <pre id="get" class="text"></pre>
+    <script>
+        onclick = () => fromMap();
+        const main = document.querySelector('.main');
+        const mode = document.querySelector('#mode');
+        const mode2 = document.querySelector('#pd');
+        const setTxt = document.querySelector('#set');
+        const map = [];
+        function create() {
+            const div = document.createElement('div');
+            div.className = 'row';
+            const cmap = [];
+            for (let i = 0; i < 16; i++) {
+                const checkbox = document.createElement("input");
+                checkbox.addEventListener("pointerenter", (e) => {
+                    if (mode2.checked) {
+                        e.preventDefault();
+                        checkbox.checked = mode.checked;
+                    }
+                });
+                checkbox.type = "checkbox";
+                checkbox.className = "checkbox";
+                cmap.push(checkbox);
+                div.appendChild(checkbox);
+            }
+            map.push(cmap);
+            return div;
+        }
+        for (let i = 0; i < 16; i++) {
+            main.appendChild(create());
+        }
+        function get() {
+            const result = [];
+            for (let i = 0; i < map.length; i++) {
+                const row = [];
+                for (let j = 0; j < map[i].length; j++) {
+                    row.push(map[i][j].checked);
+                }
+                result.push(row);
+            }
+            return result;
+        }
+        function set() {
+            const value = p2m(setTxt.value);
+            for (let i = 0; i < 16; i++) {
+                for (let j = 0; j < 16; j++) {
+                    if (value[i][j]) {
+                        map[i][j].checked = true;
+                    } else {
+                        map[i][j].checked = false;
+                    }
+                }
+            }
+            location.hash = "#" + setTxt.value;
+        }
+
+        onhashchange = () => _set()
+        onkeypress = (e) => {
+            console.log(e);
+            if (e.code === "Space") {
+                e.preventDefault();
+                mode2.checked = true;
+            }
+        }
+        onkeyup = (e) => {
+            if (e.code === "Space") {
+                e.preventDefault();
+                mode2.checked = false;
+            }
+        }
+        _set()
+        function _set() {
+            document.querySelector('#get').innerText = location.hash.substring(1);
+            const value = p2m(location.hash.substring(1));
+            for (let i = 0; i < 16; i++) {
+                for (let j = 0; j < 16; j++) {
+                    if (value[i][j]) {
+                        map[i][j].checked = true;
+                    } else {
+                        map[i][j].checked = false;
+                    }
+                }
+            }
+        }
+
+        function p2m(password) {
+            let str = "";
+            password = decodeXYZ(password);
+            for (let i = 0; i < password.length; i++) {
+                let s = password.substr(i, 1);
+                let num = parseInt(s, 16);
+                let bit = toBit(num, 4);
+                str += bit;
+            }
+            return toMap(str);
+        }
+
+        function toMap(str) {
+            const map = [];
+            for (let j = 0; j < 16; j++) {
+                map[j] = [];
+                for (let i = 16 * j; i < (16 * j + 16); i++) {
+                    if (str.length < i) {
+                        map[j][i % 16] = 0;
+                        continue;
+                    }
+                    map[j][i % 16] = parseInt(str[i])
+                }
+            }
+            return map;
+        }
+        function toBit(num, size) {
+            let s = num.toString(2)
+            for (let i = 0; i < 999; i++) {
+                if (s.length >= size) {
+                    return s;
+                }
+                s = "0" + s;
+            }
+            return s;
+        }
+
+        function toHex(num, size) {
+            let s = num.toString(16)
+            for (let i = 0; i < 999; i++) {
+                if (s.length >= size) {
+                    return s;
+                }
+                s = "0" + s;
+            }
+            return s;
+        }
+
+        function fromMap() {
+            let str = "";
+            for (let j = 0; j < 16; j++) {
+                let s = "";
+                for (let i = 0; i < 16; i++) {
+                    s += map[j][i].checked ? "1" : "0";
+                }
+                str += toHex(parseInt(s, 2), 4);
+            }
+            location.hash = "#" + encodeXYZ(str);
+        }
+        function decodeXYZ(str) {
+            return str.replace(/z/g, "00000000").replace(/y/g, "0000").replace(/x/g, "00").replace(/Z/g, "ffffffff").replace(/Y/g, "ffff").replace(/X/g, "ff");
+        }
+        function encodeXYZ(str) {
+            return str.replace(/00000000/g, "z").replace(/0000/g, "y").replace(/00/g, "x").replace(/ffffffff/g, "Z").replace(/ffff/g, "Y").replace(/ff/g, "X");
+        }
+    </script>
+</body>
+
+</html>

@@ -88,11 +88,5 @@ function toBit(num: number, size: number) {
 }
 
 function decodeXYZ(str: string) {
-    str = str.replace(/z/g, "00000000");
-    str = str.replace(/y/g, "0000");
-    str = str.replace(/x/g, "00");
-    str = str.replace(/Z/g, "ffffffff");
-    str = str.replace(/Y/g, "ffff");
-    str = str.replace(/X/g, "ff");
-    return str;
+    return str.replace(/z/g, "00000000").replace(/y/g, "0000").replace(/x/g, "00").replace(/Z/g, "ffffffff").replace(/Y/g, "ffff").replace(/X/g, "ff");
 }

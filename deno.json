@@ -1,1 +1,6 @@
-{ "nodeModulesDir": "none" }
+{
+  "nodeModulesDir": "none",
+  "tasks": {
+    "run": " deno run --allow-all main.ts"
+  }
+}

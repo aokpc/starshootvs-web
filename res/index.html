@@ -8,22 +8,31 @@
 
 <body>
     <style>
+        @font-face {
+            font-family: "FZ";
+            src: url("./fz.otf");
+        }
+
         body {
             margin: 0px;
             background-color: #000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "FZ", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #ffda60;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .run,
         .input {
             margin: 0px;
             background-color: #000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #ffda60;
+            font-family: "FZ", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 30px;
             width: 100%;
             border-color: #fff;
+            user-select: text;
         }
 
         select {
@@ -31,8 +40,8 @@
             appearance: none;
             margin: 0px;
             background-color: #29B6F6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff;
+            font-family: "FZ", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 30px;
             width: 33%;
             text-align: center;
@@ -52,33 +61,49 @@
         p#ver {
             text-align: right;
         }
+
+        .pstar {
+            background-image: url("img/p.png");
+            background-size: 30px;
+            background-repeat: no-repeat;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+        }
+
+        .pstar2 {
+            background-image: url("img/p2.png");
+            background-size: 30px;
+            background-repeat: no-repeat;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+        }
     </style>
     <div style="width:99.5%;height:100vh;" id="base">
-        <h1 style="text-align: center;"><img style="width: 500px;" src="https://flowgdd.com/star/img/shiny_logo.gif" alt="">
+        <h1 style="text-align: center;"><img style="width: 500px;" src="/img/shiny_logo.gif" alt="">
         </h1>
         <h1 style="text-align: center;font-size: 30px;">
-            キャラを選択
+            キャラをせんたく
         </h1>
         <div id="select">
         </div>
         <h1 style="text-align: center;font-size: 30px;">
-            スキルを選択
+            スキルをせんたく
         </h1>
         <div id="skill-select">
             <select id="skill-select0">
-            </select>
-            <select id="skill-select1">
-            </select>
-            <select id="skill-select2">
+            </select><select id="skill-select1"></select><select id="skill-select2">
             </select>
         </div>
         <div id="run"></div>
         <div id="preview"></div>
+        <p id="st"></p>
         <p id="ver"></p>
     </div>
     <script src="./pixi.js"></script>
     <script>
-        eval("!function(){let a=Date.now();setInterval(()=>{debugger;if(Date.now()-2000>a){location.reload()};a=Date.now();},100)}()");
+        //eval("!function(){let a=Date.now();setInterval(()=>{debugger;if(Date.now()-2000>a){location.reload()};a=Date.now();},100)}()");
     </script>
     <script src="./game.js"></script>
 </body>

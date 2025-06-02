@@ -9984,7 +9984,7 @@ id: this.id
 }
 }
 const shot_speed = 1;
-const network_delay = 200;
+const network_delay = 400;
 
 class P2PSocket extends EventTarget {
 ws;
@@ -10114,7 +10114,7 @@ throw new Error("Data channel is not open");
 console.log("Resending message", message.seq);
 this.dataChannel.send(JSON.stringify(message));
 }
-}, 200 * 2);
+}, 400 * 2);
 }
 }
 class P {
@@ -10182,10 +10182,14 @@ ver = parseInt(await fetch("/ver").then((res)=>res.text()));
 document.getElementById("ver").innerText = `ver.${new Date(ver).toLocaleTimeString()} (${ver})`;
 document.getElementById("st").innerText = `${await fetch("/online").then((res)=>res.text())}オンライン ${await fetch("/rooms").then((res)=>res.json()).then((e)=>Object.keys(e).length)}にんがプレイちゅう`;
 })();
+async ()=>{
+const st = document.getElementById("st");
+if (st) st.innerText = `${await fetch("/online").then((res)=>res.text())}オンライン ${await fetch("/rooms").then((res)=>res.json()).then((e)=>Object.keys(e).length)}にんがプレイちゅう`;
+};
 setInterval(async ()=>{
 const st = document.getElementById("st");
 if (st) st.innerText = `${await fetch("/online").then((res)=>res.text())}オンライン ${await fetch("/rooms").then((res)=>res.json()).then((e)=>Object.keys(e).length)}にんがプレイちゅう`;
-}, 3 * 1000);
+}, 10 * 1000);
 async function checkVer() {
 const res = await fetch("/ver");
 const i = await res.text();
@@ -12204,7 +12208,7 @@ cost,
 count: this.skillcount[n]
 });
 star.structures.forEach((e)=>e.onParentSkill(star.skills[on]));
-}, 200);
+}, 400);
 if (this.start) {
 this.gs.send({
 skillBegin: {
@@ -12235,7 +12239,7 @@ setTimeout(()=>{
 this.me.st.cost_speed = cost_speed;
 this.me.w = 100;
 this.me.h = 100;
-}, wait + 200);
+}, wait + 400);
 }
 } else if (star == this.enemy && on) {
 const late = on - Date.now() > 0 ? on - Date.now() : 0;
@@ -12272,7 +12276,7 @@ count: from.skillcount
 from.x,
 from.y
 ]);
-}, 200);
+}, 400);
 if (this.start) {
 this.gs.send({
 skillstruct: {
